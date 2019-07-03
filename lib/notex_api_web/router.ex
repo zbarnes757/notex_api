@@ -7,5 +7,7 @@ defmodule NotexWeb.Router do
 
   scope "/api", NotexWeb do
     pipe_through :api
+
+    resources "/users", UserController, only: [:create, :show, :update]
   end
 end

@@ -16,3 +16,6 @@ config :notex_api, Notex.Repo,
   database: "notex_api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Reduce number of rounds to not slow down tests
+config :bcrypt_elixir, :log_rounds, 4
