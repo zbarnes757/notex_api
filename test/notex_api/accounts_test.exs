@@ -21,11 +21,6 @@ defmodule Notex.AccountsTest do
       assert Accounts.list_users() == [user]
     end
 
-    test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
-    end
-
     test "create_user/1 with valid data creates a user" do
       params = params_for(:user)
       assert {:ok, %User{} = user} = Accounts.create_user(params)
@@ -48,13 +43,13 @@ defmodule Notex.AccountsTest do
       user = user_fixture()
       params = params_for(:user, username: "")
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, params)
-      assert user == Accounts.get_user!(user.id)
+      assert {:ok, ^user} = Accounts.get_user(user.id)
     end
 
     test "delete_user/1 deletes the user" do
       user = user_fixture()
       assert {:ok, %User{}} = Accounts.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
+      assert {:error, :not_found} = Accounts.get_user(user.id)
     end
   end
 end

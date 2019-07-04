@@ -4,7 +4,7 @@ defmodule Notex.Factory do
   def user_factory do
     %Notex.Accounts.User{
       username: Faker.Name.first_name(),
-      password: Faker.String.base64(),
+      password: Faker.String.base64(12),
       password_hash: nil
     }
   end

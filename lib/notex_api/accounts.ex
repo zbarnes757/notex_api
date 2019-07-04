@@ -24,18 +24,52 @@ defmodule Notex.Accounts do
   @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Returns an error tuple if the User does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+      iex> get_user(123)
+      {:ok, %User{}}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      {:error, :not_found}
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  @spec get_user(String.t()) :: {:ok, User.t()} | {:error, :not_found}
+  def get_user(id) do
+    case Repo.get(User, id) do
+      nil ->
+        {:error, :not_found}
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
+  Gets a single user by username.
+
+  Returns an error tuple if the User does not exist.
+
+  ## Examples
+
+      iex> get_user_by_username("username")
+      {:ok, %User{}}
+
+      iex> get_user_by_username("not_found")
+      {:error, :not_found}
+
+  """
+  @spec get_user_by_username(String.t()) :: {:ok, User.t()} | {:error, :not_found}
+  def get_user_by_username(username) do
+    case Repo.get_by(User, username: username) do
+      nil ->
+        {:error, :not_found}
+
+      user ->
+        {:ok, user}
+    end
+  end
 
   @doc """
   Creates a user.

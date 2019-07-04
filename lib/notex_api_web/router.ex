@@ -5,9 +5,10 @@ defmodule NotexWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", NotexWeb do
+  scope "/api/v1", NotexWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:create, :show, :update]
+    post "/signup", AuthorizationController, :signup
+    post "/login", AuthorizationController, :login
   end
 end
