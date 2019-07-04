@@ -10,5 +10,7 @@ defmodule NotexWeb.Router do
 
     post "/signup", AuthorizationController, :signup
     post "/login", AuthorizationController, :login
+
+    resources "/note", NoteController, except: [:new, :edit]
   end
 end
