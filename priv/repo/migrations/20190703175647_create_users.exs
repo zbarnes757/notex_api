@@ -9,6 +9,5 @@ defmodule Notex.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
-
   end
 end

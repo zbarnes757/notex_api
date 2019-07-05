@@ -102,9 +102,8 @@ defmodule NotexWeb.NoteControllerTest do
       conn = delete(conn, Routes.note_path(conn, :delete, note))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
-        get(conn, Routes.note_path(conn, :show, note))
-      end
+      conn = get(conn, Routes.note_path(conn, :show, note))
+      assert response(conn, 404)
     end
   end
 

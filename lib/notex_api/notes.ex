@@ -17,8 +17,12 @@ defmodule Notex.Notes do
       [%Note{}, ...]
 
   """
-  def list_note do
-    Repo.all(Note)
+  def list_note(opts \\ []) do
+    filter = Keyword.get(opts, :filter, %{})
+
+    Note
+    |> filter_by_user_id(filter)
+    |> Repo.all()
   end
 
   @doc """
@@ -35,7 +39,20 @@ defmodule Notex.Notes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_note!(id), do: Repo.get!(Note, id)
+  def get_note(id, opts \\ []) do
+    filter = Keyword.get(opts, :filter, %{})
+
+    Note
+    |> filter_by_user_id(filter)
+    |> Repo.get(id)
+    |> case do
+      nil ->
+        {:error, :not_found}
+
+      note ->
+        {:ok, note}
+    end
+  end
 
   @doc """
   Creates a note.
@@ -101,4 +118,13 @@ defmodule Notex.Notes do
   def change_note(%Note{} = note) do
     Note.changeset(note, %{})
   end
+
+  # Helpers
+
+  defp filter_by_user_id(query, %{user_id: user_id}) do
+    query
+    |> where(user_id: ^user_id)
+  end
+
+  defp filter_by_user_id(query, _), do: query
 end

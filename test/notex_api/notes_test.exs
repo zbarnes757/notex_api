@@ -38,7 +38,7 @@ defmodule Notex.NotesTest do
     test "get_note!/1 returns the note with given id" do
       user = user_fixture()
       note = note_fixture(%{user_id: user.id})
-      assert Notes.get_note!(note.id) == note
+      assert {:ok, note} == Notes.get_note(note.id)
     end
 
     test "create_note/1 with valid data creates a note" do
@@ -69,14 +69,14 @@ defmodule Notex.NotesTest do
       user = user_fixture()
       note = note_fixture(%{user_id: user.id})
       assert {:error, %Ecto.Changeset{}} = Notes.update_note(note, @invalid_attrs)
-      assert note == Notes.get_note!(note.id)
+      assert {:ok, note} == Notes.get_note(note.id)
     end
 
     test "delete_note/1 deletes the note" do
       user = user_fixture()
       note = note_fixture(%{user_id: user.id})
       assert {:ok, %Note{}} = Notes.delete_note(note)
-      assert_raise Ecto.NoResultsError, fn -> Notes.get_note!(note.id) end
+      assert {:error, :not_found} == Notes.get_note(note.id)
     end
 
     test "change_note/1 returns a note changeset" do
