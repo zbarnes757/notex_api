@@ -40,5 +40,7 @@ defmodule NotexWeb.Endpoint do
     key: "_notex_api_key",
     signing_salt: "qLxwv01w"
 
+  plug CORSPlug
+
   plug NotexWeb.Router
 end
